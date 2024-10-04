@@ -1,5 +1,6 @@
 import {getQuizById,getQuestionsByIdQuiz} from '../services/api.js'
 var listQuestion=[];
+var listAnswerSubmit =[];
 const app ={
     getQuizandQuestion: async function(){
 
@@ -70,7 +71,9 @@ const app ={
                     <input class="form-check-input border border-2 border-primary" role="button" 
                         type="${type == 1 ? 'radio': 'checkbox'}" 
                         name="question_${idQuestion}" 
-                        id="answer_${idQuestion}_${ans.id}" >
+                        id="answer_${idQuestion}_${ans.id}"
+                        data-idquestion="${idQuestion}"
+                        data-idanswer="${ans.id}" >
 
                     <label class="form-check-label" role="button" for="answer_${idQuestion}_${ans.id}" >
                         ${ans.answerTitle}
@@ -84,9 +87,48 @@ const app ={
             return Math.random() - Math.random();
         })
     },
+    handleSubmit : function(){
+        const btnSubmit = document.getElementById('btn_submit');
+        btnSubmit.addEventListener('click',()=>{
+            if(confirm("Bạn có chắc chắn nộp bài không?")){
+                // I. Lấy đáp án mà người lựa chọn
+                // 1. lấy tất cả câu trả lời theo từng câu hỏi
+                const listAnswersUser = document.querySelectorAll('.answer_items');
+                // console.log(listAnswersUser);
+                // 2. duyệt qua từng nhóm câu trả lời
+                
+                listAnswersUser?.forEach((answers)=>{
+                    // console.log({answers});
+                    const data ={
+                        idQuestion: '',
+                        idAnswers: []
+                    }
+                    const inputs = answers.querySelectorAll('input');
+
+                    //3. duyệt mảng các câu trả lời
+                    inputs?.forEach((ans)=>{
+                        if(ans.checked){
+                            // console.log(ans);
+                            // console.log("dataset:"+ans.dataset.idquestion);
+                            // console.log("getAttribute:"+ans.getAttribute('data-idquestion'));
+                            data.idQuestion = ans.dataset.idquestion;
+                            data.idAnswers.push(ans.dataset.idanswer)
+                        }
+                    })
+
+                    if(data.idAnswers && data.idAnswers.length)
+                        listAnswerSubmit.push(data)
+                })
+                console.log(listAnswerSubmit);
+                
+            }
+            
+        })
+    },
 
     start: function(){
         this.getQuizandQuestion();
+        this.handleSubmit();
     }
 }
 
