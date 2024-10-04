@@ -10,7 +10,7 @@ export const getAllQuiz = async ()=>{
     }
 }
 
-export const getQuestionByIdQuiz = async(idQuiz)=>{
+export const getQuestionsByIdQuiz = async(idQuiz)=>{
     try {
         // call api lấy danh sách question(câu hỏi theo id của quiz)
         const res = await fetch(`http://localhost:3000/questions?quizId=${idQuiz}`); // call api:bất đồng bộ
