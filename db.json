@@ -69,28 +69,28 @@
         },
         {
             "id":"aaa2",
-            "questionTiltle":"Việt Nam có bao nhiêu dân tộc",
+            "questionTiltle":"Các tỉnh thuộc Miền Bắc",
             "answers":[
                 {
                     "id": "1",
-                    "answerTitle":"10"
+                    "answerTitle":"Hà Nội"
                 },
                 {
                     "id": "2",
-                    "answerTitle":"54"
+                    "answerTitle":"Đà Nẵng"
                 },
                 {
                     "id": "3",
-                    "answerTitle":"45"
+                    "answerTitle":"Nam Định"
                 },
                 {
                     "id": "4",
-                    "answerTitle":"55"
+                    "answerTitle":"Thành phố Hồ Chí Minh"
                 }
             ],
             "quizId":"abcd",
-            "type": 1,
-            "correctAnser":["2"]
+            "type": 2,
+            "correctAnser":["1","3"]
         },
         {
             "id":"aaa3",
@@ -194,28 +194,28 @@
         },
         {
             "id":"aaa7",
-            "questionTiltle":"Con sông nào dài nhất chảy trong lãnh thổ Việt Nam?",
+            "questionTiltle":"Các tỉnh/ thành phố thuộc miền Nam?",
             "answers":[
                 {
                     "id": "1",
-                    "answerTitle":"Sông Hồng"
+                    "answerTitle":"Đà Nẵng"
                 },
                 {
                     "id": "2",
-                    "answerTitle":"Sông Đồng Nai"
+                    "answerTitle":"Quảng Nam"
                 },
                 {
                     "id": "3",
-                    "answerTitle":"Sông Lô"
+                    "answerTitle":"Cà Mau"
                 },
                 {
                     "id": "4",
-                    "answerTitle":"Sông Đà"
+                    "answerTitle":"Bình Dương"
                 }
             ],
             "quizId":"abcd",
-            "type": 1,
-            "correctAnser":["2"]
+            "type": 2,
+            "correctAnser":["3","4"]
         },
         {
             "id":"aaa8",
