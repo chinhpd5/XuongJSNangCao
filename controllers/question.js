@@ -1,6 +1,9 @@
 import {getQuizById,getQuestionsByIdQuiz} from '../services/api.js'
 var listQuestion=[];
 var listAnswerSubmit =[];
+const btnSubmit = document.getElementById('btn_submit');
+var isSumit = false;
+
 const app ={
     getQuizandQuestion: async function(){
 
@@ -13,7 +16,11 @@ const app ={
             // console.log(id);
             // Phần 1: thông tin quiz
             // 2. Lấy dữ liệu Quiz theo id của quiz
-            const dataQuiz = await getQuizById(id)
+            const dataQuiz = await getQuizById(id);
+            console.log(dataQuiz);
+            //2.1 Đếm ngược thời gian
+            this.countDown(dataQuiz.time);
+
             // console.log(dataQuiz);
 
             // 3. Hiển thị thông tin quiz qua giao diện
@@ -88,54 +95,58 @@ const app ={
         })
     },
     handleSubmit : function(){
-        const btnSubmit = document.getElementById('btn_submit');
         btnSubmit.addEventListener('click',()=>{
             if(confirm("Bạn có chắc chắn nộp bài không?")){
+                isSumit= true;
                 // 0. disabe nút input (Người dùng không thể thay đổi đáp khi đã submit)
-                const inputAll = document.querySelectorAll('input');
-                inputAll.forEach((item)=>{
-                    // hủy hành vi mặc định của sự kiện
-                    item.addEventListener('click',(e)=>{
-                        e.preventDefault()
-                    })
-
-                })
-
-                // I. Lấy đáp án mà người lựa chọn
-                // 1. lấy tất cả câu trả lời theo từng câu hỏi
-                const listAnswersUser = document.querySelectorAll('.answer_items');
-                // console.log(listAnswersUser);
-                // 2. duyệt qua từng nhóm câu trả lời
-                
-                listAnswersUser?.forEach((answers)=>{
-                    // console.log({answers});
-                    const data ={
-                        idQuestion: '',
-                        idAnswers: []
-                    }
-                    const inputs = answers.querySelectorAll('input');
-
-                    //3. duyệt mảng các câu trả lời
-                    inputs?.forEach((ans)=>{
-                        if(ans.checked){
-                            // console.log(ans);
-                            // console.log("dataset:"+ans.dataset.idquestion);
-                            // console.log("getAttribute:"+ans.getAttribute('data-idquestion'));
-                            data.idQuestion = ans.dataset.idquestion;
-                            data.idAnswers.push(ans.dataset.idanswer)
-                        }
-                    })
-
-                    if(data.idAnswers && data.idAnswers.length)
-                        listAnswerSubmit.push(data)
-                })
-                // console.log(listAnswerSubmit);
-                // Kiểm tra đáp xem có chính xác không
-                this.checkAnswers(listAnswerSubmit)
-                
+                this.handleSubmitForm()
             }
             
         })
+    },
+
+    handleSubmitForm : function(){
+        const inputAll = document.querySelectorAll('input');
+        inputAll.forEach((item)=>{
+            // hủy hành vi mặc định của sự kiện
+            item.addEventListener('click',(e)=>{
+
+                e.preventDefault()
+            })
+
+        })
+
+        // I. Lấy đáp án mà người lựa chọn
+        // 1. lấy tất cả câu trả lời theo từng câu hỏi
+        const listAnswersUser = document.querySelectorAll('.answer_items');
+        // console.log(listAnswersUser);
+        // 2. duyệt qua từng nhóm câu trả lời
+        
+        listAnswersUser?.forEach((answers)=>{
+            // console.log({answers});
+            const data ={
+                idQuestion: '',
+                idAnswers: []
+            }
+            const inputs = answers.querySelectorAll('input');
+
+            //3. duyệt mảng các câu trả lời
+            inputs?.forEach((ans)=>{
+                if(ans.checked){
+                    // console.log(ans);
+                    // console.log("dataset:"+ans.dataset.idquestion);
+                    // console.log("getAttribute:"+ans.getAttribute('data-idquestion'));
+                    data.idQuestion = ans.dataset.idquestion;
+                    data.idAnswers.push(ans.dataset.idanswer)
+                }
+            })
+
+            if(data.idAnswers && data.idAnswers.length)
+                listAnswerSubmit.push(data)
+        })
+        // console.log(listAnswerSubmit);
+        // Kiểm tra đáp xem có chính xác không
+        this.checkAnswers(listAnswerSubmit)
     },
     checkAnswers: function(listAnswerSubmit){
         // 1. Lưu trữ kết quả kiểm tra
@@ -205,9 +216,53 @@ const app ={
             title.innerHTML = `${title.textContent} ${item.status ? `<span class="badge text-bg-success">Đúng</span>`: `<span class="badge text-bg-danger">Sai</span>`}`
         })
     },
+    countDown: function(time){ // giây
+        //1. tính toán đổi giây -> phút:giây
+        const that = this;
+
+        function handleTime (){
+            const minute = Math.floor(time/60);
+            // console.log(minute);
+        
+            const second = time%60;
+            // console.log(second);
+            //2. lấy id"timer"
+            const timeElement = document.getElementById('timer');
+    
+            timeElement.innerHTML = `${minute}:${second}`
+
+            // giảm thời gian sau 1s
+            time--;
+            if(isSumit){
+                clearInterval(timeInter);
+            }
+
+            if(time < 0){
+                //submit bài làm
+                // btnSubmit.click();
+                that.handleSubmitForm();
+                clearInterval(timeInter);
+                timeElement.innerHTML = `Hết thời gian`
+            }
+
+        }
+
+        const timeInter = setInterval(handleTime,1000);
+
+    },
+    reset: function(){
+        const btnReset = document.getElementById("btn_reset");
+        btnReset.addEventListener("click",()=>{
+            if(window.confirm("Bạn có muốn làm lại không ?")){
+                //tải trang
+                window.location.reload();
+            }
+        })
+    },
     start: function(){
         this.getQuizandQuestion();
         this.handleSubmit();
+        this.reset();
     }
 }
 
