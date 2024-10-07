@@ -229,7 +229,10 @@ const app ={
             //2. lấy id"timer"
             const timeElement = document.getElementById('timer');
     
-            timeElement.innerHTML = `${minute}:${second}`
+            timeElement.innerHTML = `
+            ${minute < 10 ? '0': ''}${minute}
+            :
+            ${second < 10 ? '0': ''}${second}`
 
             // giảm thời gian sau 1s
             time--;

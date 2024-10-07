@@ -32,3 +32,19 @@ export const getQuizById = async (id) =>{
         alert(error)
     }
 }
+
+export const addQuiz = async(data)=>{
+    try {
+        const res = await fetch('http://localhost:3000/quizs',{
+            method: "post",
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }) // res là res trả về nếu thêm thành công
+
+        const data = await res.json();
+    } catch (error) {
+        alert("Thêm lỗi")
+    }
+}
