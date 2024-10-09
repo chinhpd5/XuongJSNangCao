@@ -36,15 +36,36 @@ export const getQuizById = async (id) =>{
 export const addQuiz = async(data)=>{
     try {
         const res = await fetch('http://localhost:3000/quizs',{
-            method: "post",
+            method: "post", // phương thức thêm mới
             headers:{
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data) // chuyển dữ liệu từ object -> JSON
         }) // res là res trả về nếu thêm thành công
 
-        const data = await res.json();
+        const dataRes = await res.json();
+        return dataRes;
     } catch (error) {
         alert("Thêm lỗi")
     }
+}
+
+export const addQuestions =async(datas)=>{
+    try {
+        datas.forEach(async(item)=>{
+            await fetch('http://localhost:3000/questions',{
+                method: "post", // phương thức thêm mới
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(item) // chuyển dữ liệu từ object -> JSON
+            }) // res là res trả về nếu thêm thành công
+        })
+
+        
+    } catch (error) {
+        alert("Thêm lỗi")
+    }
+
+
 }
